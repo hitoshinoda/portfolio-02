@@ -32,6 +32,7 @@ export function getLocalizedPath(path: string, newLocale: string): string {
   if (newLocale === defaultLocale) {
     return cleanPath;
   } else {
-    return `/${newLocale}${cleanPath === "/" ? "" : cleanPath}`;
+    // return `/${newLocale}${cleanPath === "/" ? "" : cleanPath}`;
+    return `/portfolio-02/${newLocale}${cleanPath === "/" ? "" : cleanPath}`;
   }
 }
