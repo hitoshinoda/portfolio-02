@@ -21,6 +21,7 @@ export async function getMessages(locale: string) {
 // 言語切り替え用のURL生成
 export function getLocalizedPath(path: string, newLocale: string): string {
   const currentLocale = getLocaleFromPath(path);
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
   // 現在のパスから言語部分を削除
   let cleanPath = path;
@@ -30,9 +31,8 @@ export function getLocalizedPath(path: string, newLocale: string): string {
 
   // 新しい言語のパスを作成
   if (newLocale === defaultLocale) {
-    return cleanPath;
+    return `${basePath}${cleanPath}`;
   } else {
-    // return `/${newLocale}${cleanPath === "/" ? "" : cleanPath}`;
-    return `/portfolio-02/${newLocale}${cleanPath === "/" ? "" : cleanPath}`;
+    return `${basePath}/${newLocale}${cleanPath === "/" ? "" : cleanPath}`;
   }
 }
