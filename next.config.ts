@@ -9,7 +9,7 @@ const repoName = isProdBuild
 const basePath = isProdBuild ? `/${repoName}` : "";
 const assetPrefix = isProdBuild ? `/${repoName}/` : "";
 
-const withNextIntl = createNextIntlPlugin();
+
 const nextConfig: NextConfig = {
   devIndicators: false,
   output: "export",
@@ -30,4 +30,5 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
 };
 
+const withNextIntl = createNextIntlPlugin();
 export default withNextIntl(nextConfig);

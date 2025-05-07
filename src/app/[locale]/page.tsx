@@ -1,59 +1,31 @@
-"use client";
+// src/app/[locale]/page.tsx
+import { getMessages, locales } from "@/i18n/i18n";
+import I18nProvider from "@/components/I18nProvider";
+import HomePage from "@/components/HomePage";
 
-import React, { useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Mousewheel, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
-import { useTranslations } from "next-intl";
+interface Props {
+  params: Promise<{ locale: string }>;
+}
 
-import SectionLayout from "@/components/SectionLayout";
-import { sectionsContentConfig, SectionContentConfig } from "@/components/SectionData";
+export default async function LocalizedHome({ params }: Props) {
+  const { locale } = await params;
 
-export default function Home() {
-  const t = useTranslations();
-  const [activeIndex, setActiveIndex] = useState(0);
+  // 指定された言語のメッセージを取得
+  const messages = await getMessages(locale);
 
   return (
-    <>
-      <Swiper
-        direction={"vertical"}
-        slidesPerView={1}
-        spaceBetween={0}
-        mousewheel={true}
-        pagination={{
-          clickable: true,
-        }}
-        loop={true}
-        modules={[Mousewheel, Pagination]}
-        className="h-screen w-full"
-        onSlideChange={(swiper) => {
-          setActiveIndex(swiper.realIndex);
-        }}
-      >
-        {sectionsContentConfig.map((config: SectionContentConfig) => {
-          const paragraphs = t.raw(`sections.${config.id}.paragraphs`) as string[];
-          
-          return (
-            <SwiperSlide
-              key={config.id}
-              className="flex items-center justify-center"
-            >
-              <div className="h-full w-full">
-                <SectionLayout
-                  key={`${config.id}-${activeIndex}`}
-                  title={t(`sections.${config.id}.title`)}
-                  subtitle={t(`sections.${config.id}.subtitle`)}
-                  paragraphs={paragraphs}
-                  imageUrl={config.imageUrl}
-                  imageAlt={t(`sections.${config.id}.imageAlt`)}
-                  backgroundColor={config.backgroundColor}
-                />
-              </div>
-            </SwiperSlide>
-          );
-        })}
-      </Swiper>
-    </>
+    <I18nProvider locale={locale} messages={messages}>
+      <HomePage />
+    </I18nProvider>
   );
+}
+
+// SSGのためのパラメータ生成
+export function generateStaticParams() {
+  // デフォルト言語を除外
+  return locales
+    .filter((locale) => locale !== "ja")
+    .map((locale) => ({
+      locale,
+    }));
 }

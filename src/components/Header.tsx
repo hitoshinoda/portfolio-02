@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import Link from "next/link";
 import HamburgerButton from "@/components/Button/HamburgerButton";
-import { LanguageToggle } from "@/components/LanguageToggle";
+import LanguageToggle from "@/components/LanguageToggle";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);

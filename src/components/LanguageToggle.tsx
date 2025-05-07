@@ -1,29 +1,46 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
-import { routing } from "@/i18n/routing";
+import { usePathname } from "next/navigation";
+import { getLocalizedPath, locales } from "@/i18n/i18n";
 
-export const LanguageToggle = () => {
-  const locale = useLocale();
-  const router = useRouter();
+const languageNames: Record<string, string> = {
+  ja: "日本語",
+  en: "English",
+  fr: "Français",
+  es: "Español",
+  de: "Deutsch",
+  it: "Italiano",
+  zh: "中文",
+  ko: "한국어",
+  ru: "Русский",
+  pt: "Português",
+};
+
+export default function LanguageToggle() {
+  const pathname = usePathname();
+
+  const handleLanguageChange = (locale: string) => {
+    const newPath = getLocalizedPath(pathname, locale);
+    window.location.href = newPath;
+  };
 
   return (
-    <div className="flex gap-2">
-      {routing.locales.map((loc) => (
-        <button
-          key={loc}
-          onClick={() => router.push(`/${loc}`)}
-          className={`px-2 py-1 text-sm ${
-            loc === locale
-              ? "text-gray-400 cursor-default"
-              : "text-gray-700 hover:text-gray-900"
-          }`}
-          disabled={loc === locale}
-        >
-          {loc.toUpperCase()}
-        </button>
-      ))}
+    <div className="language-switcher">
+      {locales
+        .map((locale) => (
+          <button
+            key={locale}
+            onClick={() => handleLanguageChange(locale)}
+            className="hover:underline"
+          >
+            {languageNames[locale]}
+          </button>
+        ))
+        .reduce((prev, curr, i) => (
+          <>
+            {prev} {i > 0 ? " | " : ""} {curr}
+          </>
+        ))}
     </div>
   );
-};
+}
