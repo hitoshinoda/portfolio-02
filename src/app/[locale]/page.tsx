@@ -22,9 +22,7 @@ export default async function LocalizedHome({ params }: Props) {
 
 // SSGのためのパラメータ生成
 export function generateStaticParams() {
-  // デフォルト言語を除外
   return locales
-    .filter((locale) => locale !== "ja")
     .map((locale) => ({
       locale,
     }));
